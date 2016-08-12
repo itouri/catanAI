@@ -22,11 +22,9 @@ BaseSprite.prototype.checkClickedCircle = function(clicked_x,clicked_y){
 	dx = center_x - clicked_x;
 	dy = center_y - clicked_y;
 
-	distance = Math.sqrt(dx *dx + dy * dy);
+	distance = Math.sqrt(dx * dx + dy * dy);
 
-	var margin = 10;
-
-	if ( distance + margin < radius ) {
+	if ( distance < radius ) {
 		this.onClick();
 	}
 }
@@ -149,9 +147,9 @@ HarborTileSprite.prototype.onClick = function(){
 		_harbor_panel_remains[this.harbor_id]++;
 		this.harbor_id = -1; 
 	//クリックしたタイルが空タイル　かつ　選択中の資源タイルに残りがある
-	} else if(_harbor_panel_remains[_now_choose_harbor_id_panel] > 0) {
+	} else if(_harbor_panel_remains[_now_choose_harbor_panel] > 0) {
 		//空タイルに資源を入れて残りを減らす
-		this.image = Asset.images[RESOURCE_NAMES[_now_choose_harbor_id_panel] + "_tile"];
+		this.image = Asset.images["harbor_"+HARBOR_NAMES[_now_choose_harbor_panel]];
 		this.harbor_id = _now_choose_harbor_panel;
 		_harbor_panel_remains[_now_choose_harbor_panel]--;
 	}
@@ -159,7 +157,7 @@ HarborTileSprite.prototype.onClick = function(){
 
 HarborTileSprite.prototype.draw = function(){
 	//上下反転　これずっーと反転したままにならない?
-	if (this.orient) ctx.transform(1, 0, 0, -1, 0, this.height);
+	//if (this.orient) ctx.transform(1, 0, 0, -1, 0, this.height);
 	ctx.drawImage( this.image , this.x , this.y , this.width , this.height );
 }
 
@@ -240,15 +238,9 @@ inherits(CheckButtonSprite, BaseSprite);
 //@override
 // _now_choose_resource_panelに選んだ資源をセット
 CheckButtonSprite.prototype.onClick = function(){
-	switch(_now_init_state){
-		case ENUM_INIT_STATE.TILE:
-			_now_init_state = ENUM_INIT_STATE.TOKEN;
-		break;
 
-		case ENUM_INIT_STATE.TOKEN:
-			_now_init_state = ENUM_INIT_STATE.HARBOR;
-		break;
-		default:
+	if ( _now_init_state != ENUM_INIT_STATE.END - 1 ) {
+		_now_init_state = _now_init_state + 1;
 	}
 }
 
@@ -270,16 +262,9 @@ inherits(BackButtonSprite, BaseSprite);
 //@override
 // _now_choose_resource_panelに選んだ資源をセット
 BackButtonSprite.prototype.onClick = function(){
-	switch(_now_init_state){
-		case ENUM_INIT_STATE.TOKEN:
-			_now_init_state = ENUM_INIT_STATE.TILE;
-		break;
 
-		case ENUM_INIT_STATE.HARBOR:
-			_now_init_state = ENUM_INIT_STATE.TOKEN;
-		break;
-
-		default:
+	if (_now_init_state != 0) {
+		_now_init_state = _now_init_state - 1;
 	}
 }
 
@@ -315,6 +300,55 @@ ChooseTokenPanelSprite.prototype.onClick = function(){
 
 /////////////////////////
 
+// ただREDとか出しとくだけなので あんまり複雑な処理がいらない
+var ChoosePlayerColorPanelSprite = function(Image,x,y,width,height){
+	//??? 親クラスへのメンバ変数の代入はできない?
+	//BaseSprite.call = (this,Image,x,y,width,height);
+	this.image = Image;
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+}
+
+// inherits 
+inherits(ChoosePlayerColorPanelSprite, BaseSprite);
+
+ChoosePlayerColorPanelSprite.prototype.draw = function(){
+	ctx.drawImage( this.image , this.x , this.y , this.width , this.height );
+}
+
+//////////////////////////////
+
+// AI or HUM 												   bool String
+var ChooseAiOrHumPanelSprite = function(Image,x,y,width,height,isAi,color){
+	//??? 親クラスへのメンバ変数の代入はできない?
+	//BaseSprite.call = (this,Image,x,y,width,height);
+	this.image = Image;
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	this.isAi = isAi;	//bool
+	this.color = color;	//string
+}
+
+// inherits 
+inherits(ChooseAiOrHumPanelSprite, BaseSprite);
+
+ChooseAiOrHumPanelSprite.prototype.draw = function(){
+	ctx.drawImage( this.image , this.x , this.y , this.width , this.height );
+}
+
+//@override
+// playerパネルにAIかどうかも含めて画面にセット
+ChooseAiOrHumPanelSprite.prototype.onClick = function(){
+	//_player_information_panels.push();
+
+}
+
+//////////////////////////////
+
 // マウスイベントを設定
 var mouseEvent = function( e ) {
 	// 動作を停止
@@ -328,16 +362,37 @@ var mouseEvent = function( e ) {
 		_field_tile_sprites[i].checkClickedCircle(x,y);
 	}
 	//ココにクリックされた時の処理を書く
-	if ( _now_init_state == ENUM_INIT_STATE.TILE ) {
-		for (var i = 0; i < _choose_resouce_panels.length; i++) {
-			_choose_resouce_panels[i].checkClickedRect(x,y);
-		}
-	}
 
-	if ( _now_init_state == ENUM_INIT_STATE.TOKEN ) {
-		for (var i = 0; i < _choose_token_panels.length; i++) {
-			_choose_token_panels[i].checkClickedRect(x,y);
-		}
+	switch( _now_init_state ){
+		case ENUM_INIT_STATE.TILE:
+			for (var i = 0; i < _choose_resouce_panels.length; i++) {
+				_choose_resouce_panels[i].checkClickedRect(x,y);
+			}
+			break;
+
+		case ENUM_INIT_STATE.TOKEN:
+			for (var i = 0; i < _choose_token_panels.length; i++) {
+				_choose_token_panels[i].checkClickedRect(x,y);
+			}
+			break;
+
+		case ENUM_INIT_STATE.HARBOR:
+			//港タイルのクリック判定
+			for (var i = 0; i < _field_tile_sprites.length; i++) {
+				_harbor_tiles[i].checkClickedCircle(x,y);
+			}
+
+			for (var i = 0; i < _choose_harbor_panels.length; i++) {
+				_choose_harbor_panels[i].checkClickedRect(x,y);
+			}
+			break;
+
+		case ENUM_INIT_STATE.PLAYER_COLOR:
+
+			break;
+
+		case ENUM_INIT_STATE.PLAYER_ORDER:
+			break;
 	}
 
 
@@ -351,8 +406,9 @@ var ENUM_INIT_STATE = {
 	TILE 	: 0,
 	TOKEN 	: 1,
 	HARBOR 	: 2,
-	COLOR 	: 3,
-	PLAYER 	: 4,
+	PLAYER_COLOR 	: 3, //AIか人かと席順も決める
+	PLAYER_ORDER 	: 4, //初期配置の順番を決める
+	END : 5 //CheckButtonで使用
 };
 
 var IMG_PATH = "./img/"
@@ -364,10 +420,14 @@ var _resource_panel_remains = [       3,        4,      4,      4,       3,     
 var HARBOR_NAMES 		    = ["brick" ,"lumber" ,"wool" ,"grain", "ore" ,"3_1"];
 var _harbor_panel_remains= [		  1,		1,		1,		1,		 1,	  5];
 
+var ENUM_PLAYER_COLORS = { RED:0, BLUE:1, ORANGE:2, WHITE:3};
+var PLAYER_COLORS 	   = ["red" ,"blue" ,"orange" ,"white" ];
+
 						//   0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12
 var _token_panel_remains = [-1,-1, 1, 2, 2, 2, 2,-1, 2, 2, 2, 2, 1];
 
-var _now_init_state = ENUM_INIT_STATE.TILE;
+//test!
+var _now_init_state = ENUM_INIT_STATE.HARBOR;
 
 var _now_choose_resouce_panel = ENUM_RESOURCE.BRICK;
 var _now_choose_token_panel   = 2;
@@ -381,6 +441,14 @@ var _choose_token_panels = [];
 // ChooseResoucePanelクラスにしようと思う
 var _choose_harbor_panels = [];
 var _harbor_tiles = [];
+
+//ただの色の名前のラベル
+var _choose_player_color_labels = [];
+//AI or HUM 色情報も持っとく
+var _choose_ai_hum_panels = [];
+
+// 画面左に出てる情報	
+var _player_information_panels = [];
 
 var _check_button_sprite;
 var	_back_button_sprite;
@@ -447,6 +515,16 @@ function draw(){
 		_field_tile_sprites[i].draw();
 	}
 
+	//港の三角の枠線を表示
+	if (_now_init_state != ENUM_INIT_STATE.HARBOR) {
+		for (var i = _harbor_tiles.length - 1; i >= 0; i--) {
+			//空っぽのタイルは表示しない
+			if (_harbor_tiles[i].harbor_id != -1){
+				_harbor_tiles[i].draw();
+			}
+		}
+	}
+
 	switch(_now_init_state){
 		case ENUM_INIT_STATE.TILE:
 			for (var i = 0; i < _choose_resouce_panels.length; i++) {
@@ -465,6 +543,20 @@ function draw(){
 			for (var i = 0; i < _choose_harbor_panels.length; i++) {
 				_choose_harbor_panels[i].draw();
 			}
+
+			//港の三角の枠線を表示
+			for (var i = _harbor_tiles.length - 1; i >= 0; i--) {
+				_harbor_tiles[i].draw();
+			}
+			break;
+
+		case ENUM_INIT_STATE.PLAYER_COLOR:
+			for (var i = 0; i < _choose_player_color_labels.length; i++) {
+				_choose_player_color_labels.draw();
+			}
+
+			// ai or hum
+			break;
 	}
 
 	_check_button_sprite.draw();
@@ -518,40 +610,65 @@ function initSprites(){
 	}
 
 //harbor_tileの初期化（まじめんどくせえ）
-	var orient = false;
+	var orient = true;
 
 	var margin_x = 7;
 	var margin_y = 10;
 
+	var rate = 0.25;
+	var width  = 537 * rate / 2;
+	var height = 465 * rate / 2;
+
 	var init_x = 680 - width / 2;
 	var init_y = 420;
 
-	var rate = 0.25;
-	var width  = 537 * rate;
-	var height = 465 * rate;
-
 	var harbor_empty = Asset.images["harbor_empty"];
 
-	var x,y;
+	var x = init_x;
+	var y = init_y + height;
+
 	for (var i = 0; i < 30; i++) {
 		if (0 <= i && i <= 4) {
-			
+			y -= height;
 		} else if(5 <= i && i <= 9){
-
+			//最初だけ特別扱い
+			if (i % 2 == 0){
+				x += width / 2;
+			} else {
+				x += width;
+				y -= height;
+			}
 		} else if(10 <= i && i <= 14){
-
+			//最初だけ特別扱い
+			if (i % 2 == 1){
+				x += width / 2;
+			} else {
+				x += width;
+				y += height;
+			}
 		} else if(15 <= i && i <= 19){
-
+				y += height;
 		} else if(20 <= i && i <= 24){
-
+			if (i % 2 == 1){
+				x -= width / 2;
+			} else {
+				x -= width;
+				y += height;
+			}
 		} else if(25 <= i && i <= 29){
-
+			if (i % 2 == 0){
+				x -= width / 2;
+			} else {
+				x -= width;
+				y -= height;
+			}
 		}
 		var tmp =  new HarborTileSprite(harbor_empty,x,y,width,height,id,orient)
-		_harbor_tile_sprites.push(tmp);
+		//_harbor_tile_sprites.push(tmp);
+		_harbor_tiles.push(tmp);
 
 		//trueとfalseを反転
-		orient ~= orient;
+		orient = ~orient;
 	}
 
 //資源選択タイルの配置
@@ -616,6 +733,25 @@ function initSprites(){
 		_choose_harbor_panels.push(tmp);
 	}
 
+//PLAYER_COLORで使うパネルを初期化
+	for (var i = 0; i < PLAYER_COLORS.length; i++) {
+		var image = Asset.images["player_color_"+PLAYER_COLORS[i]];
+
+		var rate = 0.35;
+		var width  = 812 * rate;
+		var height = 312 * rate;
+
+		var margin = 5;
+
+		var init_xy = 10;
+		var x = init_xy;
+		var y = init_xy + i * ( height + margin );
+
+		//var tmp =  new  (image,x,y,width,height,i);
+		_choose_player_color_labels .push(tmp);	
+	}
+
+//PLAYER_ORDERで使うパネルを初期化
 
 //ネクストボタンの初期化
 //バックボタンの初期化
@@ -684,6 +820,18 @@ function domImg(){
 		makeImg(""+i,IMG_PATH + "token/"		,"token"      + i);
 		makeImg(""+i,IMG_PATH + "token_panel/"	,"token_panel"+ i);
 	}
+
+	//playerパネルの読み込み
+	for (var i = 0; i < PLAYER_COLORS.length; i++) {
+		makeImg(PLAYER_COLORS[i],IMG_PATH+"player_panel/","player_"+PLAYER_COLORS[i]);
+		//ENUM_INIT_STATE.PLAYER_COLORで使う
+		makeImg(PLAYER_COLORS[i],IMG_PATH+"player_color/","player_color_"+PLAYER_COLORS[i]);
+	}
+	//AI
+	makeImg("ai",IMG_PATH+"player_color/","player_color_"+"ai");
+	//HUM
+	makeImg("hum",IMG_PATH+"player_color/","player_color_"+"hum");
+
 
 	makeImg("empty_tile",IMG_PATH);
 	makeImg("check_button",IMG_PATH);
