@@ -6,7 +6,7 @@ var ctx;
 var _field_tile_sprites = [];
 
 //test!
-var _now_init_state = ENUM_INIT_STATE.HARBOR;
+var _now_init_state = ENUM_INIT_STATE.PLAYER_COLOR;
 
 var _now_choose_resouce_panel = ENUM_RESOURCE.BRICK;
 var _now_choose_token_panel   = 2;
@@ -26,8 +26,11 @@ var _choose_player_color_labels = [];
 //AI or HUM 色情報も持っとく
 var _choose_ai_hum_panels = [];
 
-// 画面左に出てる情報	
-var _player_information_panels = [];
+var _players = [];
+var _player_info_sprites = [];
+
+// 初期建設の順番 要素にはcolorが入る(int)	
+var _init_build_orders = [];
 
 var _check_button_sprite;
 var	_back_button_sprite;
@@ -71,10 +74,15 @@ var mouseEvent = function( e ) {
 			break;
 
 		case ENUM_INIT_STATE.PLAYER_COLOR:
-
+			for (var i = 0; i < _choose_ai_hum_panels.length; i++) {
+				_choose_ai_hum_panels[i].checkClickedRect(x,y);
+			}
 			break;
 
 		case ENUM_INIT_STATE.PLAYER_ORDER:
+			for (var i = 0; i < _choose_player_color_labels.length; i++) {
+				_choose_player_color_labels[i].checkClickedRect(x,y);
+			}
 			break;
 	}
 
@@ -107,6 +115,10 @@ function draw(){
 		}
 	}
 
+	for (var i = 0; i < _players.length; i++) {
+		_players[i].info.draw();
+	}
+
 	switch(_now_init_state){
 		case ENUM_INIT_STATE.TILE:
 			for (var i = 0; i < _choose_resouce_panels.length; i++) {
@@ -134,10 +146,19 @@ function draw(){
 
 		case ENUM_INIT_STATE.PLAYER_COLOR:
 			for (var i = 0; i < _choose_player_color_labels.length; i++) {
-				_choose_player_color_labels.draw();
+				_choose_player_color_labels[i].draw();
 			}
 
 			// ai or hum
+			for (var i = 0; i < _choose_ai_hum_panels.length; i++) {
+				_choose_ai_hum_panels[i].draw();
+			}
+			break;
+
+		case ENUM_INIT_STATE.PLAYER_ORDER:
+			for (var i = 0; i < _choose_player_color_labels.length; i++) {
+				_choose_player_color_labels[i].draw();
+			}
 			break;
 	}
 
@@ -316,21 +337,38 @@ function initSprites(){
 	}
 
 //PLAYER_COLORで使うパネルを初期化
+	var ai_image = Asset.images["player_color_ai"];
+	var hum_image = Asset.images["player_color_hum"];
+
 	for (var i = 0; i < PLAYER_COLORS.length; i++) {
 		var image = Asset.images["player_color_"+PLAYER_COLORS[i]];
 
-		var rate = 0.35;
+		var rate = 0.25;
 		var width  = 812 * rate;
 		var height = 312 * rate;
 
 		var margin = 5;
 
-		var init_xy = 10;
-		var x = init_xy;
-		var y = init_xy + i * ( height + margin );
+		var init_x = 650;
+		var init_y = 200;
 
-		//var tmp =  new  (image,x,y,width,height,i);
-		_choose_player_color_labels .push(tmp);	
+		var x = init_x;
+		var y = init_y + i * ( height + margin );
+
+		var ai_hum_width  = width * 2/3;
+		var ai_hum_height = height;
+
+		var ai_x = x + width + width * 0.05;
+		var hum_x = ai_x + ai_hum_width + width * 0.05;
+
+		var tmp =  new ChoosePlayerColorLabelSprite(image,x,y,width,height,i);
+		_choose_player_color_labels.push(tmp);
+
+		var tmpAi  = new ChooseAiOrHumPanelSprite(ai_image , ai_x , y, ai_hum_width, ai_hum_height, true ,i);
+		var tmpHum = new ChooseAiOrHumPanelSprite(hum_image, hum_x, y, ai_hum_width, ai_hum_height, false,i);
+		_choose_ai_hum_panels.push(tmpAi);
+		_choose_ai_hum_panels.push(tmpHum);
+
 	}
 
 //PLAYER_ORDERで使うパネルを初期化

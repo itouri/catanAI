@@ -81,10 +81,11 @@ function domImg(){
 
 	//playerパネルの読み込み
 	for (var i = 0; i < PLAYER_COLORS.length; i++) {
-		makeImg(PLAYER_COLORS[i],IMG_PATH+"player_panel/","player_"+PLAYER_COLORS[i]);
+		makeImg(PLAYER_COLORS[i],IMG_PATH+"player_info/","player_"+PLAYER_COLORS[i]);
 		//ENUM_INIT_STATE.PLAYER_COLORで使う
 		makeImg(PLAYER_COLORS[i],IMG_PATH+"player_color/","player_color_"+PLAYER_COLORS[i]);
 	}
+	makeImg("ai",IMG_PATH+"player_info/","player_info_ai");
 	//AI
 	makeImg("ai",IMG_PATH+"player_color/","player_color_"+"ai");
 	//HUM

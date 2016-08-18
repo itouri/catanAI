@@ -15,6 +15,16 @@ inherits(BackButtonSprite, BaseSprite);
 // _now_choose_resource_panelに選んだ資源をセット
 BackButtonSprite.prototype.onClick = function(){
 
+	if (_now_init_state == ENUM_INIT_STATE.PLAYER_COLOR) {
+		_players = [];
+	}
+
+	if (_now_init_state == ENUM_INIT_STATE.PLAYER_ORDER) {
+		_players = [];
+		_init_build_orders = [];
+	}
+
+
 	if (_now_init_state != 0) {
 		_now_init_state = _now_init_state - 1;
 	}

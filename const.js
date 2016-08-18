@@ -19,5 +19,17 @@ var _harbor_panel_remains= [		  1,		1,		1,		1,		 1,	  5];
 var ENUM_PLAYER_COLORS = { RED:0, BLUE:1, ORANGE:2, WHITE:3};
 var PLAYER_COLORS 	   = ["red" ,"blue" ,"orange" ,"white" ];
 
+var ENUM_ACTIONS = { 
+	KNIGHT		:0, //騎士
+	PLENTY		:1, //収穫
+	ROAD		:2, //がいどう建設
+	MONOPOLY	:3, //独占
+	POINT		:4,	//勝利点
+};
+var ACTION_NAMES   = ["KNIGHT","PLENTY","ROAD","MONOPOLY","POINT"];
+var ACTION_REMAINS = [      14,       2,     2,         2,      5];
+
 						//   0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12
 var _token_panel_remains = [-1,-1, 1, 2, 2, 2, 2,-1, 2, 2, 2, 2, 1];
+
+var MAX_PLAYER = 4;
