@@ -64,7 +64,7 @@ var mouseEvent = function( e ) {
 
 		case ENUM_INIT_STATE.HARBOR:
 			//港タイルのクリック判定
-			for (var i = 0; i < _field_tile_sprites.length; i++) {
+			for (var i = 0; i < _harbor_tiles.length; i++) {
 				_harbor_tiles[i].checkClickedCircle(x,y);
 			}
 
@@ -213,19 +213,18 @@ function initSprites(){
 	}
 
 //harbor_tileの初期化（まじめんどくせえ）
-	var orient = true;
+	var orient = false;
 
 	var margin_x = 7;
 	var margin_y = 10;
 
 	var rate = 0.25;
-	var width  = 537 * rate / 2;
-	var height = 465 * rate / 2;
+	var adjust = 3.2
+	var width  = 537 * rate / 2 - adjust;
+	var height = 465 * rate / 2 ;
 
-	var init_x = 680 - width / 2;
+	var init_x = 680 - width / 2 + adjust;
 	var init_y = 420;
-
-	var harbor_empty = Asset.images["harbor_empty"];
 
 	var x = init_x;
 	var y = init_y + height;
@@ -266,12 +265,13 @@ function initSprites(){
 				y -= height;
 			}
 		}
+		var harbor_empty = (orient) ? Asset.images["harbor_empty"] : Asset.images["harbor_empty_r"] ;
 		var tmp =  new HarborTileSprite(harbor_empty,x,y,width,height,id,orient)
 		//_harbor_tile_sprites.push(tmp);
 		_harbor_tiles.push(tmp);
 
 		//trueとfalseを反転
-		orient = ~orient;
+		orient = !orient;
 	}
 
 //資源選択タイルの配置

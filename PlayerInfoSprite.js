@@ -41,6 +41,8 @@ PlayerInfoSprite.prototype.draw = function(){
 				order = i;
 			}
 		}
+
+		//TODO 固定値が多いので改善すべし
 		ctx.fillStyle = "black";
 		ctx.font = "60px 'ＭＳ Ｐゴシック'";
 		if(order != -1) ctx.fillText(order+1,width + x -45,height + y - 5);

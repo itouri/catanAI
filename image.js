@@ -68,9 +68,11 @@ function domImg(){
 	//harbor読み込み
 	for (var i = 0; i < HARBOR_NAMES.length; i++) {
 		makeImg(HARBOR_NAMES[i],IMG_PATH+"harbor/","harbor_"+HARBOR_NAMES[i]);
+		makeImg(HARBOR_NAMES[i]+"_r",IMG_PATH+"harbor/","harbor_"+HARBOR_NAMES[i]+"_r");
 		makeImg(HARBOR_NAMES[i],IMG_PATH+"harbor_panel/","harbor_panel"+HARBOR_NAMES[i]);
 	}
 	makeImg("empty_harbor"	 ,IMG_PATH+"harbor/","harbor_empty"	);
+	makeImg("empty_harbor_r"	 ,IMG_PATH+"harbor/","harbor_empty_r"	);
 
 	//token系の読み込み
 	for (var i = 0; i < _token_panel_remains.length; i++) {

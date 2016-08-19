@@ -22,13 +22,14 @@ inherits(HarborTileSprite, BaseSprite);
 HarborTileSprite.prototype.onClick = function(){
 	if (this.harbor_id != -1) {
 		//入っていた資源を空にして残りを増やす
-		this.image = Asset.images["harbor_empty"];
+		this.image = (this.orient) ? Asset.images["harbor_empty"] : Asset.images["harbor_empty_r"];
 		_harbor_panel_remains[this.harbor_id]++;
 		this.harbor_id = -1; 
 	//クリックしたタイルが空タイル　かつ　選択中の資源タイルに残りがある
 	} else if(_harbor_panel_remains[_now_choose_harbor_panel] > 0) {
 		//空タイルに資源を入れて残りを減らす
-		this.image = Asset.images["harbor_"+HARBOR_NAMES[_now_choose_harbor_panel]];
+		var image_name = (this.orient) ? "harbor_"+HARBOR_NAMES[_now_choose_harbor_panel] : "harbor_"+HARBOR_NAMES[_now_choose_harbor_panel]+"_r";
+		this.image = Asset.images[image_name];
 		this.harbor_id = _now_choose_harbor_panel;
 		_harbor_panel_remains[_now_choose_harbor_panel]--;
 	}
