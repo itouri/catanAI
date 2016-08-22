@@ -35,6 +35,8 @@ var _init_build_orders = [];
 var _check_button_sprite;
 var	_back_button_sprite;
 
+var _intersection_sprites = []
+
 // マウスイベントを設定
 var mouseEvent = function( e ) {
 	// 動作を停止
@@ -373,8 +375,7 @@ function initSprites(){
 
 //PLAYER_ORDERで使うパネルを初期化
 
-//ネクストボタンの初期化
-//バックボタンの初期化
+//ネクストボタン,バックボタンの初期化
 	var x = 1220;
 	var y = 0;
 
@@ -386,6 +387,13 @@ function initSprites(){
 
 	var tmp = new BackButtonSprite(Asset.images["back_button"],x-width,y,width,height);
 	_back_button_sprite = tmp;
+
+// 交差点の初期化
+	
+	for (var i = 0; i < 54; i++) {
+		var tmp = new IntersectionSprite(x,y,width,height,i);
+		_intersection_sprites.push(tmp);
+	}
 }
 
 function init(){

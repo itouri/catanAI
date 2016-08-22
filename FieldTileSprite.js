@@ -11,6 +11,9 @@ var FieldTileSprite = function (Image,x,y,width,height,id) {
 
 	this.resouce = -1;
 	this.token = -1;
+
+	//このタイルに接している交差点
+	this.contain_intersections = _adjacents_tiles[id];
 }
 
 // inherits 
