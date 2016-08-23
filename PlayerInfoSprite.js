@@ -6,7 +6,7 @@ var PlayerInfoSprite = function(id,isAi,color){
 	this.id = id;
 
 	//drawの座標設定
-	this.image = Asset.images["player_" + color];
+	this.image = Asset.images["player_" + PLAYER_COLORS[color]];
 	this.ai_image = Asset.images["player_info_ai"];
 }
 
@@ -37,7 +37,7 @@ PlayerInfoSprite.prototype.draw = function(){
 	if (_now_init_state == ENUM_INIT_STATE.PLAYER_ORDER) {
 		var order = -1;
 		for (var i = 0; i < _init_build_orders.length; i++) {
-			if (PLAYER_COLORS[ _init_build_orders[i] ] == this.color){
+			if (_init_build_orders[i] == this.color){
 				order = i;
 			}
 		}

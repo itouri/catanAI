@@ -30,7 +30,11 @@ CheckButtonSprite.prototype.onClick = function(){
 		}
 	}
 
-	if ( _now_init_state != ENUM_INIT_STATE.END - 1 ) {
+	if ( _now_init_state == ENUM_INIT_STATE.PLAYER_COLOR ) {
+		_show_controller = true;
+	}
+
+	if ( _now_init_state != ENUM_INIT_STATE.END ) {
 		_now_init_state = _now_init_state + 1;
 	}
 }

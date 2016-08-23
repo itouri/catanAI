@@ -22,6 +22,7 @@ BackButtonSprite.prototype.onClick = function(){
 	if (_now_init_state == ENUM_INIT_STATE.PLAYER_ORDER) {
 		_players = [];
 		_init_build_orders = [];
+		_show_controller = false;
 	}
 
 

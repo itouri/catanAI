@@ -17,7 +17,7 @@ inherits(ChooseAiOrHumPanelSprite, BaseSprite);
 //すでに同じ色のプレイヤーが登録されてないかチェック		
 ChooseAiOrHumPanelSprite.prototype.checkUnique = function(){
 	for (var i = 0; i < _players.length; i++) {
-		if (_players[i].color == PLAYER_COLORS[this.color]){
+		if (_players[i].color == this.color){
 			return false;
 		}
 	}
@@ -35,7 +35,7 @@ ChooseAiOrHumPanelSprite.prototype.draw = function(){
 // playerパネルにAIかどうかも含めて画面にセット
 ChooseAiOrHumPanelSprite.prototype.onClick = function(){
 	if ( _players.length < 4 && this.checkUnique() ){
-		var tmp = new Player(_players.length,this.isAi,PLAYER_COLORS[this.color]);
+		var tmp = new Player(_players.length,this.isAi,this.color);
 		_players.push(tmp);
 	}
 	this.draw();

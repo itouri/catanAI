@@ -1,8 +1,8 @@
-var IntersectionSprite = function(x,y,width,height,id){
+var IntersectionSprite = function(width,height,x,y,id){
 
 	var ENUM_BUILDING = {
 		NONE : 0,
-		STTLEMENT : 1,
+		SETTLEMENT : 1,
 		CITY : 2
 	};
 
@@ -12,10 +12,11 @@ var IntersectionSprite = function(x,y,width,height,id){
 
 	this.domestic_trade = -1; //2:1 3:1ができるようになる？
 
-	this.x = x;
-	this.y = y;
 	this.width = width;
 	this.height = height;
+
+	this.x = x;
+	this.y = y;
 }
 
 // inherits 
@@ -23,7 +24,7 @@ inherits(IntersectionSprite, BaseSprite);
 
 //@override
 IntersectionSprite.prototype.onClick = function(){
-
+	var result = buildSettlement(0,this.id,true);//test!!
 }
 
 IntersectionSprite.prototype.init = function(){
@@ -32,6 +33,14 @@ IntersectionSprite.prototype.init = function(){
 }
 
 IntersectionSprite.prototype.draw = function(){
-	var image = Asset.images["token"+2];
-	ctx.drawImage( image , this.x , this.y , this.width , this.height ); 
+	var image;
+	if ( this.owner_id != -1 ) {
+		if ( this.building == 1 ) {
+			image = Asset.images["settlement_" + PLAYER_COLORS[_players[this.owner_id].color] ];
+		} else {
+			image = Asset.images["city_" + PLAYER_COLORS[_players[this.owner_id].color] ];
+		}
+		
+		ctx.drawImage( image, this.x, this.y, this.width, this.height); 
+	}
 }

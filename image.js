@@ -61,9 +61,11 @@ function domImg(){
 	var body = document.getElementById('body');
 	//配列のforeachってないの？
 	for (var i = 0; i < RESOURCE_NAMES.length; i++) {
-		makeImg(RESOURCE_NAMES[i],IMG_PATH);
-		makeImg(RESOURCE_NAMES[i]+"_tile",IMG_PATH);
+		makeImg(RESOURCE_NAMES[i],IMG_PATH+"choose_tile/");
+		makeImg(RESOURCE_NAMES[i]+"_tile",IMG_PATH+"tile/");
 	}
+	makeImg("empty_tile",IMG_PATH+"tile/");
+
 
 	//harbor読み込み
 	for (var i = 0; i < HARBOR_NAMES.length; i++) {
@@ -80,6 +82,7 @@ function domImg(){
 		makeImg(""+i,IMG_PATH + "token/"		,"token"      + i);
 		makeImg(""+i,IMG_PATH + "token_panel/"	,"token_panel"+ i);
 	}
+	makeImg(""+7,IMG_PATH + "token/"	,"token"+ 7);
 
 	//playerパネルの読み込み
 	for (var i = 0; i < PLAYER_COLORS.length; i++) {
@@ -93,8 +96,45 @@ function domImg(){
 	//HUM
 	makeImg("hum",IMG_PATH+"player_color/","player_color_"+"hum");
 
+	//controllerTabSprite
+	for (var i = 0; i < CONTROLLER_TAB_NAMES.length; i++) {
+		makeImg(CONTROLLER_TAB_NAMES[i],IMG_PATH+"controller_tab/");
+	}
 
-	makeImg("empty_tile",IMG_PATH);
+	//tabの中身に使う画像の読み込み
+	//dice はtokenを使う
+	//action
+	//                                      - 1 はポイントの分
+	for (var i = 0; i < ACTION_NAMES.length - 1; i++) {
+		makeImg(ACTION_NAMES[i],IMG_PATH+"action/","tab_action_"+ACTION_NAMES[i]);
+	}
+
+	//build
+	for (var i = 0; i < BUILD_NAMES.length; i++) {
+		makeImg(BUILD_NAMES[i],IMG_PATH+"build/","tab_build_"+BUILD_NAMES[i]);
+	}
+
+	//domestic
+	for (var i = 0; i < HARBOR_NAMES.length; i++) {
+		makeImg(HARBOR_NAMES[i],IMG_PATH+"domestic_trade/","tab_domestic_"+HARBOR_NAMES[i]);
+	}
+	makeImg("4_1",IMG_PATH+"domestic_trade/","tab_domestic_"+"4_1");
+
+	//maritime
+	for (var i = 0; i < PLAYER_COLORS.length; i++) {
+		makeImg(PLAYER_COLORS[i],IMG_PATH+"color_panel/","color_panel_"+PLAYER_COLORS[i]);
+	}
+
+	//開拓地
+	for (var i = 0; i < PLAYER_COLORS.length; i++) {
+		makeImg(PLAYER_COLORS[i],IMG_PATH+"settlement/","settlement_"+PLAYER_COLORS[i]);
+	}
+
+	//都市
+	for (var i = 0; i < PLAYER_COLORS.length; i++) {
+		makeImg(PLAYER_COLORS[i],IMG_PATH+"city/","city_"+PLAYER_COLORS[i]);
+	}
+
 	makeImg("check_button",IMG_PATH);
 	makeImg("back_button",IMG_PATH);
 }

@@ -6,7 +6,7 @@ var ctx;
 var _field_tile_sprites = [];
 
 //test!
-var _now_init_state = ENUM_INIT_STATE.PLAYER_COLOR;
+var _now_init_state = ENUM_INIT_STATE.TILE;
 
 var _now_choose_resouce_panel = ENUM_RESOURCE.BRICK;
 var _now_choose_token_panel   = 2;
@@ -35,7 +35,25 @@ var _init_build_orders = [];
 var _check_button_sprite;
 var	_back_button_sprite;
 
-var _intersection_sprites = []
+var _intersection_sprites = [];
+
+var _selected_tab = ENUM_CONTROLLER_TAB.DICE;
+
+//controller tabの配列たち
+var _tab_dice_sprites = [];
+var _tab_action_sprites = [];
+var _tab_build_sprites = [];
+var _tab_domestic_sprites = [];
+var _tab_maritime_sprites = [];
+
+//サイコロを振るのタブ "サイコロ","アクション"	
+var _tab_before_dice_rolls = [];
+
+//サイコロを振ったあとのタブ "建設","貿易","交渉","アクション"
+var _tab_after_dice_rolls = [];
+
+var _show_controller = false;
+var _is_before_dice_roll = true;
 
 // マウスイベントを設定
 var mouseEvent = function( e ) {
@@ -88,6 +106,52 @@ var mouseEvent = function( e ) {
 			break;
 	}
 
+	//test!!
+	if ( _now_init_state > ENUM_INIT_STATE.PLAYER_COLOR ){
+		for (var i = 0; i < _intersection_sprites.length; i++) {
+			_intersection_sprites[i].checkClickedCircle(x,y);
+		}
+	}
+
+	if (_show_controller) {
+		switch(_selected_tab){
+			case ENUM_CONTROLLER_TAB.DICE:
+				for (var i = 0; i < _tab_dice_sprites.length; i++) {
+					_tab_dice_sprites[i].checkClickedCircle(x,y);
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.ACTION:
+				for (var i = 0; i < _tab_action_sprites.length; i++) {
+					_tab_action_sprites[i].checkClickedRect(x,y);
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.BUILD:
+				for (var i = 0; i < _tab_build_sprites.length; i++) {
+					_tab_build_sprites[i].checkClickedRect(x,y);
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.DOMESTIC:
+				for (var i = 0; i < _tab_domestic_sprites.length; i++) {
+					_tab_domestic_sprites[i].checkClickedRect(x,y);
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.MARITIME:
+				for (var i = 0; i < _tab_maritime_sprites.length; i++) {
+					_tab_maritime_sprites[i].checkClickedRect(x,y);
+				}
+				break;
+		}
+		if (_is_before_dice_roll) {
+			for (var i = 0; i < _tab_before_dice_rolls.length; i++) {
+				_tab_before_dice_rolls[i].checkClickedRect(x,y);
+			}
+		} else {
+			for (var i = 0; i < _tab_after_dice_rolls.length; i++) {
+				_tab_after_dice_rolls[i].checkClickedRect(x,y);
+			}
+		}
+	}
+
 
 	_check_button_sprite.checkClickedRect(x,y);
 	_back_button_sprite.checkClickedRect(x,y);
@@ -119,6 +183,61 @@ function draw(){
 
 	for (var i = 0; i < _players.length; i++) {
 		_players[i].info.draw();
+	}
+
+	if ( _show_controller ) {
+		// 背景描写
+		ctx.beginPath();
+		ctx.fillStyle = "rgb(160, 160, 255)";
+		ctx.fillRect(10, 545, 615, 170); //FIXME width,height変数にする
+
+		//サイコロを振る前
+		if ( _is_before_dice_roll ) {
+			for (var i = 0; i < _tab_before_dice_rolls.length; i++) {
+				_tab_before_dice_rolls[i].draw();
+			}
+		//サイコロを振った後
+		} else {
+			for (var i = 0; i < _tab_after_dice_rolls.length; i++) {
+				_tab_after_dice_rolls[i].draw();
+			}
+		}
+
+		switch( _selected_tab ){
+			case ENUM_CONTROLLER_TAB.DICE:
+				for (var i = 0; i < _tab_dice_sprites.length; i++) {
+					_tab_dice_sprites[i].draw();
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.ACTION:
+				for (var i = 0; i < _tab_action_sprites.length; i++) {
+					_tab_action_sprites[i].draw();
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.BUILD:
+				for (var i = 0; i < _tab_build_sprites.length; i++) {
+					_tab_build_sprites[i].draw();
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.DOMESTIC:
+				for (var i = 0; i < _tab_domestic_sprites.length; i++) {
+					_tab_domestic_sprites[i].draw();
+				}
+				break;
+			case ENUM_CONTROLLER_TAB.MARITIME:
+				for (var i = 0; i < _tab_maritime_sprites.length; i++) {
+					//TODO ターンのプレイヤーの色は表示しない	
+					_tab_maritime_sprites[i].draw();
+				}
+				break;
+		}
+	}
+
+	//test!!
+	if ( _now_init_state > ENUM_INIT_STATE.PLAYER_COLOR ){
+		for (var i = 0; i < _intersection_sprites.length; i++) {
+			_intersection_sprites[i].draw();
+		}
 	}
 
 	switch(_now_init_state){
@@ -213,6 +332,48 @@ function initSprites(){
 			}
 		}
 	}
+//交差点の初期化
+	var init_x = 680;
+	var init_y = 420 - height * 1.5;
+	var id = 0;
+	var x = init_x;
+	var y = init_y;
+	var x2,y2;
+	var width = width - 5;
+	var s_width = 40;
+	var s_height = 40;
+	var vertex = [3,4,5,5,4,3];
+	for (var i = 0; i < vertex.length; i++) {
+		if ( i < 3 ) {
+			for (var j = 0; j < vertex[i]; j++) {
+				x = init_x + width * i * 3/4;
+				y = init_y + j * height - i * height/2;
+				var tmp =  new IntersectionSprite(s_width,s_height,x-s_width/2,y-s_height/2,id++);
+				_intersection_sprites.push(tmp);
+			}
+			for (var j = 0; j < vertex[i]+1; j++) {
+				x2 = x + width * 1/4;
+				y2 = y - ( 1/2 + vertex[i] - 1 ) * height + j * height;
+				var tmp =  new IntersectionSprite(s_width,s_height,x2-s_width/2,y2-s_height/2,id++);
+				_intersection_sprites.push(tmp);
+			}
+		} else {
+			var init_x2 = x2 + 1/2 * width;
+			var init_y2 = y2 - height * 5;
+			for (var j = 0; j < vertex[i]+1; j++) {
+				x3 = init_x2 + width * (i-3) * 3/4;
+				y3 = init_y2 + j * height + (i-3) * height / 2;
+				var tmp =  new IntersectionSprite(s_width,s_height,x3-s_width/2,y3-s_height/2,id++);
+				_intersection_sprites.push(tmp);
+			}
+			for (var j = 0; j < vertex[i]; j++) {
+				x = x3 + width * 1/4;
+				y = - vertex[i] * height + (y3 + 1/2 * height) + j * height;
+				var tmp =  new IntersectionSprite(s_width,s_height,x-s_width/2,y-s_height/2,id++);
+				_intersection_sprites.push(tmp);
+			}
+		}
+	}	
 
 //harbor_tileの初期化（まじめんどくせえ）
 	var orient = false;
@@ -389,11 +550,110 @@ function initSprites(){
 	_back_button_sprite = tmp;
 
 // 交差点の初期化
-	
 	for (var i = 0; i < 54; i++) {
 		var tmp = new IntersectionSprite(x,y,width,height,i);
 		_intersection_sprites.push(tmp);
 	}
+
+//コントローラーの初期化
+	var init_x = 10;
+	var init_y = 510;
+
+	var rate = 1 / 3;
+	var width = 270 * rate;
+	var height = 90 * rate;
+
+	var margin = 5;
+
+	// サイコロを振る前のタブ
+	var dice = new ControllerTabSprite(Asset.images["dice"],init_x,init_y,width,height,ENUM_CONTROLLER_TAB.DICE);
+	var action = new ControllerTabSprite(Asset.images["action"],init_x+width+margin,init_y,width,height,ENUM_CONTROLLER_TAB.ACTION);
+	_tab_before_dice_rolls.push(dice);
+	_tab_before_dice_rolls.push(action);
+
+	// サイコロを振った前のタブ
+	var build    = new ControllerTabSprite(Asset.images["build"]		 ,init_x 				 ,init_y,width,height,ENUM_CONTROLLER_TAB.BUILD);
+	var domestic = new ControllerTabSprite(Asset.images["domestic_trade"],init_x+(width+margin)  ,init_y,width,height,ENUM_CONTROLLER_TAB.DOMESTIC);
+	var maritime = new ControllerTabSprite(Asset.images["maritime_trade"],init_x+(width+margin)*2,init_y,width,height,ENUM_CONTROLLER_TAB.MARITIME);
+	var action2  = new ControllerTabSprite(Asset.images["action"]		 ,init_x+(width+margin)*3,init_y,width,height,ENUM_CONTROLLER_TAB.ACTION);
+	_tab_after_dice_rolls.push(build);
+	_tab_after_dice_rolls.push(domestic);
+	_tab_after_dice_rolls.push(maritime);
+	_tab_after_dice_rolls.push(action2);
+
+//tab の内容の初期化
+	var init_x = 10;
+	var init_y = 545;
+
+	var init_margin_xy = 20;
+
+	// dice
+	var margin = 10;
+	var width = 60;
+	var height = 60;
+	for (var i = 2; i <= 12; i++) {
+		var image = Asset.images["token"+i];
+		var x = init_x + init_margin_xy + (width + margin) * ( (i - 2) % 6);
+		var y = init_y + init_margin_xy;
+		if (i > 7) y = y + height + margin;
+
+		if (i == 7) {
+			var x = init_x + init_margin_xy + (width + margin) * (7 - 2 + 0.5);
+			var y = init_y + init_margin_xy + (height + margin) / 2;
+		}
+
+		var tmp = new TabDiceSprite(image,x,y,width,height,i);
+		_tab_dice_sprites.push(tmp);
+	}
+
+	// action & build & maritime レイアウト同じだから一度にやってしまおう
+	var margin = 30;
+	var width = 80;
+	var height = 120;
+	//                                      point
+	for (var i = 0; i < ACTION_NAMES.length - 1; i++) {
+
+		var image  = Asset.images["tab_action_"+ACTION_NAMES[i]];
+		var image2 = Asset.images["tab_build_"+BUILD_NAMES[i]];
+		var image3 = Asset.images["color_panel_"+PLAYER_COLORS[i]];
+
+		var x = init_x + init_margin_xy + (width + margin) * i;
+		var y = init_y + init_margin_xy;
+
+		var tmp  = new TabActionSprite(image,x,y,width,height,i);
+		var tmp2 = new TabBuildSprite(image2,x,y,width,height,i);
+		var tmp3 = new TabMaritimeSprite(image3,x,y,width,height,i);
+
+		_tab_action_sprites.push(tmp);
+		_tab_build_sprites.push(tmp2);
+		_tab_maritime_sprites.push(tmp3);
+	}
+
+	// domestic
+	var x,y;
+	var margin = 10;
+	var rate = 8 / 30;
+	var width = 300 * rate;
+	var height = 240 * rate;
+	for (var i = 1; i < 6 ; i++) {
+		var image  = Asset.images["tab_domestic_"+HARBOR_NAMES[i-1]];
+		x = init_x + init_margin_xy + (width + margin) * (i % 3);
+		y = init_y + init_margin_xy;
+		if (i > 2) y = y + (height + margin);
+
+		var tmp = new TabDomesticSprite(image,x,y,width,height,i-1);
+		_tab_domestic_sprites.push(tmp);
+	}
+	y = init_y + init_margin_xy;
+	width = 300 * (height * 2 + margin) / 420;
+	height = height * 2 + margin;
+	var image  = Asset.images["tab_domestic_3_1"];
+	var image2 = Asset.images["tab_domestic_4_1"];
+	var tmp = new TabDomesticSprite(image  ,x+margin+width     ,y,width,height,5);
+	var tmp2 = new TabDomesticSprite(image2,x+(margin*2+width)*2 ,y,width,height,6);
+	_tab_domestic_sprites.push(tmp);
+	_tab_domestic_sprites.push(tmp2);
+
 }
 
 function init(){
