@@ -14,10 +14,18 @@ inherits(TabBuildSprite, BaseSprite);
 
 //@override
 TabBuildSprite.prototype.onClick = function(){
-	// ダイス処理
-		//資源の配分
-		//騎士?
-		//コントローラーの変更
+	switch(this.id){
+		case ENUM_BUILD.ROAD:
+			alert("OK");
+			buildRoad(0);
+			break;
+		case ENUM_BUILD.SETTLEMENT:
+			break;
+		case ENUM_BUILD.CITY:
+			break;
+		case ENUM_BUILD.DEVELOPMENT:
+			break;
+	}
 }
 
 TabBuildSprite.prototype.draw = function(){

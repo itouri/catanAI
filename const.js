@@ -41,6 +41,7 @@ var ENUM_CONTROLLER_TAB = {
 };
 var CONTROLLER_TAB_NAMES = ["dice","action","build","domestic_trade","maritime_trade"];
 
+var ENUM_BUILD  = {ROAD:0,SETTLEMENT:1,CITY:2,DEVELOPMENT:3};
 var BUILD_NAMES = ["road","settlement","city","development"];
 
 var MAX_PLAYER = 4;

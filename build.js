@@ -1,7 +1,37 @@
 //道，開拓地，都市，発展に関する処理
 
-function buildRoad(player_id){
+//buildRoadで深さ優先探索を行う 最長の距離を測るのにも使えるかも	
+function searchRoad(player_id,settlement_id,checked_places=[]){
+	//交差点に接してる辺を調べる
+	if (checked_places.indexOf(settlement_id) == -1 ){
+		checked_places.push(settlement_id);
+		for (var i = 0; i < _adjacents_intersection[settlement_id].length; i++) {
+			if ( _edge_sprites[_adjacents_intersection[settlement_id][i]].owner_id == player_id) {
+				searchRoad(player_id,_adjacents[settlement_id][i],checked_places);
+			} else if(_edge_sprites[_adjacents_intersection[settlement_id][i]].owner_id == -1){
+				_able_build_places.push(_adjacents_intersection[settlement_id][i]);
+			}
+		}
+	}
+}
 
+function buildRoad(player_id,road_id){
+	//建設可能な場所を探索して表示
+	_able_build_places = [];
+	for (var i = 0; i < _players[player_id].settlements.length; i++) {
+		searchRoad(player_id,_players[player_id].settlements[i]);
+	}
+
+	for (var i = 0; i < _players[player_id].cities.length; i++) {
+		searchRoad(player_id,_players[player_id].cities[i]);
+	}
+
+	//クリックされたところに建設
+	_players[player_id].road_num++;
+	_players[player_id].roads.push(road_id);
+	_edge_sprites[road_id].owner_id = player_id;
+
+	draw();
 }
 
 //                                 開拓したい場所    初期建設かどうか
@@ -35,6 +65,7 @@ function buildSettlement(player_id, intersection_id, initBuild = false){
 		if(_intersection_sprites[intersection_id].building != 2){
 			_intersection_sprites[intersection_id].building = 1;
 			_players[player_id].settlement_num++;
+			_players[player_id].settlements.push(intersection_id);
 		}
 		return true;
 	} else {

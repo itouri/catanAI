@@ -14,10 +14,16 @@ inherits(TabActionSprite, BaseSprite);
 
 //@override
 TabActionSprite.prototype.onClick = function(){
-	// ダイス処理
-		//資源の配分
-		//騎士?
-		//コントローラーの変更
+		switch(this.id){
+			case ENUM_ACTIONS.KNIGHT:
+				break;
+			case ENUM_ACTIONS.PLENTY:
+				break;
+			case ENUM_ACTIONS.ROAD:
+				break;
+			case ENUM_ACTIONS.MONOPOLY:
+				break;
+		}
 }
 
 TabActionSprite.prototype.draw = function(){

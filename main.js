@@ -36,6 +36,7 @@ var _check_button_sprite;
 var	_back_button_sprite;
 
 var _intersection_sprites = [];
+var _edge_sprites = [];
 
 var _selected_tab = ENUM_CONTROLLER_TAB.DICE;
 
@@ -54,6 +55,11 @@ var _tab_after_dice_rolls = [];
 
 var _show_controller = false;
 var _is_before_dice_roll = true;
+
+//現在の手番のID
+var _trun_player_id;
+
+var _able_build_places = [];
 
 // マウスイベントを設定
 var mouseEvent = function( e ) {
@@ -112,6 +118,11 @@ var mouseEvent = function( e ) {
 			_intersection_sprites[i].checkClickedCircle(x,y);
 		}
 	}
+
+	//test!!
+		for (var i = 0; i < _edge_sprites.length; i++) {
+			_edge_sprites[i].checkClickedCircle(x,y);
+		}
 
 	if (_show_controller) {
 		switch(_selected_tab){
@@ -239,6 +250,17 @@ function draw(){
 			_intersection_sprites[i].draw();
 		}
 	}
+
+	//test!!
+		for (var i = 0; i < _edge_sprites.length; i++) {
+			_edge_sprites[i].draw();
+		}
+
+		for (var i = 0; i < _able_build_places.length; i++) {
+			_edge_sprites[_able_build_places[i]].draw(true);
+		}
+
+
 
 	switch(_now_init_state){
 		case ENUM_INIT_STATE.TILE:
@@ -373,7 +395,55 @@ function initSprites(){
 				_intersection_sprites.push(tmp);
 			}
 		}
-	}	
+	}
+
+//辺の初期化
+	var init_x = 680 + width / 8;
+	var init_y = 420 - height * 7/4;
+	var id = 0;
+	var width = width + 2;
+	//var vertex = [3,4,5,6,5,4,3];
+	var vertex = [3,4,5,5,4,3];
+
+
+	for (var i = 0; i < vertex.length; i++) {
+		if ( i < 3 ) {
+			// angle 0:- 1:/ 2:\ 
+			for (var j = 0; j < vertex[i]; j++) {
+				x = init_x + 1/2 + width * i * 3/4;
+				y = init_y + height * j - height * i * 1/2;
+				var tmp =  new EdgeSprite(s_width,s_height,x-s_width/2,y-s_height/2,id++,1);
+				_edge_sprites.push(tmp);
+				y = y + height * 1/2;
+				var tmp =  new EdgeSprite(s_width,s_height,x-s_width/2,y-s_height/2,id++,2);
+				_edge_sprites.push(tmp);
+			}
+			for (var j = 0; j < vertex[i]+1; j++) {
+				x2 = x + width * 1/3;
+				y2 = y + height * ( j - vertex[i] + 1/4);
+				var tmp =  new EdgeSprite(s_width,s_height,x2-s_width/2,y2-s_height/2,id++,0);
+				_edge_sprites.push(tmp);
+			}
+		} else {
+			for (var j = 0; j < vertex[i]; j++) {
+				x = init_x + 1/2 + width * i * 3/4;
+				y = init_y + height * j + height * (i%3-1) * 1/2 - height * 1/2;
+				var tmp =  new EdgeSprite(s_width,s_height,x-s_width/2,y-s_height/2,id++,2);
+				_edge_sprites.push(tmp);
+				y = y + height * 1/2;
+				var tmp =  new EdgeSprite(s_width,s_height,x-s_width/2,y-s_height/2,id++,1);
+				_edge_sprites.push(tmp);
+				y = y - height * 1/2
+			}
+			if(vertex[i] == 3) continue;
+			for (var j = 0; j < vertex[i]; j++) {
+				x2 = x + width * 1/3;
+				y2 = y + height * ( j - vertex[i] + 1 + 1/4);
+				var tmp =  new EdgeSprite(s_width,s_height,x2-s_width/2,y2-s_height/2,id++,0);
+				_edge_sprites.push(tmp);
+			}
+		}
+	}
 
 //harbor_tileの初期化（まじめんどくせえ）
 	var orient = false;
