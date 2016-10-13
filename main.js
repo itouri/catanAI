@@ -6,7 +6,7 @@ var ctx;
 var _field_tile_sprites = [];
 
 //test!
-var _now_init_state = ENUM_INIT_STATE.TILE;
+var _now_init_state = ENUM_INIT_STATE.PLAYER_COLOR;
 
 var _now_choose_resouce_panel = ENUM_RESOURCE.BRICK;
 var _now_choose_token_panel   = 2;
@@ -54,7 +54,10 @@ var _tab_before_dice_rolls = [];
 var _tab_after_dice_rolls = [];
 
 var _show_controller = false;
+
+//ターンに関する変数
 var _is_before_dice_roll = true;
+var _action_used = false; //そのターン中アクションを使っている
 
 //現在の手番のID
 var _trun_player_id;
@@ -69,6 +72,10 @@ var mouseEvent = function( e ) {
 	// マウス位置を取得する
 	var x = e.pageX ;	// X座標
 	var y = e.pageY ;	// Y座標
+
+	ctx.fillStyle = "black";
+	ctx.font = "60px 'ＭＳ Ｐゴシック'";
+	ctx.fillText( x+":"+y, 600,600); //test!!!
 
 	for (var i = 0; i < _field_tile_sprites.length; i++) {
 		_field_tile_sprites[i].checkClickedCircle(x,y);

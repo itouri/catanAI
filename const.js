@@ -4,7 +4,8 @@ var ENUM_INIT_STATE = {
 	HARBOR 	: 2,
 	PLAYER_COLOR 	: 3, //AIか人かと席順も決める
 	PLAYER_ORDER 	: 4, //初期配置の順番を決める
-	END : 5 //CheckButtonで使用
+	BUILD : 5, //初期建設
+	END : 6 //CheckButtonで使用
 };
 
 var IMG_PATH = "./img/"
@@ -38,10 +39,15 @@ var ENUM_CONTROLLER_TAB = {
 	BUILD		:2,
 	DOMESTIC	:3, //貿易
 	MARITIME	:4, //交渉
+	VICTORY		:5  //勝利宣言	
 };
 var CONTROLLER_TAB_NAMES = ["dice","action","build","domestic_trade","maritime_trade"];
 
 var ENUM_BUILD  = {ROAD:0,SETTLEMENT:1,CITY:2,DEVELOPMENT:3};
 var BUILD_NAMES = ["road","settlement","city","development"];
+
+var MAX_SETTLEMENT = 5;
+var MAX_CITY = 4;
+var MAX_ROAD = 15;
 
 var MAX_PLAYER = 4;

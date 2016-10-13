@@ -47,6 +47,42 @@ PlayerInfoSprite.prototype.draw = function(){
 		ctx.font = "60px 'ＭＳ Ｐゴシック'";
 		if(order != -1) ctx.fillText(order+1,width + x -45,height + y - 5);
 	}
+
+	//プレイヤーの情報を表示
+	ctx.fillStyle = "white";
+	ctx.font = "25px 'ＭＳ Ｐゴシック'";
+
+	var high_y = y + height * 0.45; //上段のy座標
+	var low_y  = y + height * 0.89; //下段のy座標
+
+	var player = _players[this.id];
+
+	if( player.road_length != 0) 	  ctx.fillText( player.road_length,x + width * (0.203),high_y); //橋のながさ
+	if( player.unuse_action_num != 0) ctx.fillText( player.unuse_action_num, x + width * (0.204 + 0.1),high_y); //未使用チャンス枚数
+
+	//使用済みアクション
+	for (var i = 0; i < player.used_actions.length; i++) {
+		if (player.used_actions[i] != 0) {
+			ctx.fillText( player.used_actions[i], x + width * (0.44 + i * 0.1), high_y ); 
+		}
+	}
+
+	//資源
+	for (var i = 0; i < player.resources.length; i++) {
+		if(player.resources[i] != 0){
+			//２ケタになると枠からはみ出るので，16進数表示（16枚以上になったらはみ出すけどないよね．．．）	
+			ctx.fillText( player.resources[i].toString(16), x + width * (0.21 + i * 0.106),low_y); 
+		}
+	}
+
+	if( player.hand_diff != 0) ctx.fillText( player.hand_diff, x + width * 0.718,low_y-width*0.026);  //手札誤差
+
+	//ctx.fillText( player.longest_load, width + x -45,height + y - 5); //ロンゲスト
+	//ctx.fillText( player.largest_army, width + x -45,height + y - 5); //ラージスト
+
+	ctx.fillStyle = "black";
+	ctx.font = "60px 'ＭＳ Ｐゴシック'";
+	if( player.victory_point != 0) ctx.fillText( player.victory_point ,width + x -45,height + y - 5); //勝利点
 }
 
 //@override

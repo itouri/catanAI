@@ -16,7 +16,7 @@ Player.prototype.init = function(){
 	this.hand_diff = 0; //盗賊で取ったり取られたりして本来の手札数との差
 
 	this.unuse_action_num = 0; //未発動のアクション枚数
-	this.used_actions = [0,0,0,0,0]; //使用済みのアクション
+	this.used_actions = [0,0,0,0]; //使用済みのアクション
 	this.unuse_actions = [0,0,0,0,0]; // 未使用アクション //AIのみ使用
 
 	this.settlement_num = 0; //開拓地の数
