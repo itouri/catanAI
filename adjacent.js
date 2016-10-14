@@ -70,25 +70,29 @@ _adjacents[53] = [49,50];
 
 //各タイルがどの点を持っているか
 var _adjacents_tiles = [];
-_adjacents_tiles[0]  = [ 0, 3, 4, 7, 8,12];
+_adjacents_tiles[2]  = [ 0, 3, 4, 7, 8,12];
 _adjacents_tiles[1]  = [ 1, 4, 5, 8, 9,13];
-_adjacents_tiles[2]  = [ 2, 5, 6, 9,10,14];
-_adjacents_tiles[3]  = [ 7,11,12,16,17,22];
-_adjacents_tiles[4]  = [ 8,12,13,17,18,23];
-_adjacents_tiles[5]  = [ 9,13,14,18,19,24];
-_adjacents_tiles[6]  = [10,14,15,19,20,25];
-_adjacents_tiles[7]  = [16,21,22,27,28,33];
-_adjacents_tiles[8]  = [17,22,23,28,29,34];
+_adjacents_tiles[0]  = [ 2, 5, 6, 9,10,14];
+
+_adjacents_tiles[6]  = [ 7,11,12,16,17,22];
+_adjacents_tiles[5]  = [ 8,12,13,17,18,23];
+_adjacents_tiles[4]  = [ 9,13,14,18,19,24];
+_adjacents_tiles[3]  = [10,14,15,19,20,25];
+
+_adjacents_tiles[11]  = [16,21,22,27,28,33];
+_adjacents_tiles[10]  = [17,22,23,28,29,34];
 _adjacents_tiles[9]  = [18,23,24,29,30,35];
-_adjacents_tiles[10] = [19,24,25,30,31,36];
-_adjacents_tiles[11] = [20,25,26,31,32,37];
-_adjacents_tiles[12] = [28,33,34,38,39,43];
-_adjacents_tiles[13] = [29,34,35,39,40,44];
-_adjacents_tiles[14] = [30,35,36,40,41,45];
-_adjacents_tiles[15] = [31,36,37,41,42,46];
-_adjacents_tiles[16] = [39,43,44,47,48,51];
+_adjacents_tiles[8] = [19,24,25,30,31,36];
+_adjacents_tiles[7] = [20,25,26,31,32,37];
+
+_adjacents_tiles[15] = [28,33,34,38,39,43];
+_adjacents_tiles[14] = [29,34,35,39,40,44];
+_adjacents_tiles[13] = [30,35,36,40,41,45];
+_adjacents_tiles[12] = [31,36,37,41,42,46];
+
+_adjacents_tiles[18] = [39,43,44,47,48,51];
 _adjacents_tiles[17] = [40,44,45,48,49,52];
-_adjacents_tiles[18] = [41,45,46,49,50,53];
+_adjacents_tiles[16] = [41,45,46,49,50,53];
 
 //各港がどの交差点に隣接してるか
 var _adjacents_harbar = [];
