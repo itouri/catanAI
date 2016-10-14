@@ -1,10 +1,14 @@
 //アクションのときに使う関数たち
 
 //騎士
-function knight(){
+function knight(isAction=true){
 	//盗賊を移動
 	//相手から1枚奪う
-	_action_used = true;
+
+	//ダイスによるknightならアクションを使ったことにはしない
+	if (isAction) {
+		_action_used = true;
+	}	
 }
 
 //収穫

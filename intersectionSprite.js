@@ -24,7 +24,12 @@ inherits(IntersectionSprite, BaseSprite);
 
 //@override
 IntersectionSprite.prototype.onClick = function(){
-	var result = buildSettlement(0,this.id,true);//test!!
+	//var result = buildSettlement(0,this.id,true);//test!!
+	switch( _now_init_state ){
+		case ENUM_INIT_STATE.BUILD:
+			initBuild(this.id);
+		break;
+	}
 }
 
 IntersectionSprite.prototype.init = function(){

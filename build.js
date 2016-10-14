@@ -20,7 +20,7 @@ function searchRoad(player_id,settlement_id,checked_places=[]){
 	}
 }
 
-function buildRoad(player_id,road_id){
+function buildRoad(player_id,road_id,initBuild = false){
 	//建設可能な場所を探索して表示
 	_able_build_places = [];
 	//開拓地ごとに可能な配置場所を _able_build_places に追加
@@ -38,14 +38,20 @@ function buildRoad(player_id,road_id){
 		return false;
 	}
 
+	//TODO 初期建設は 今さっき建てた開拓地の隣かつ道がまだないところ	
+	if (initBuild) {
+		//今さっき建てた道の隣 if (  ) {}
+		//まだ道がない if( ) {} 
+	}
+
 	//クリックされた交差点が建設可能なら建設
 	if ( _able_build_places.indexOf(road_id) >= 0 ) {
 		_players[player_id].road_num++;
 		_players[player_id].roads.push(road_id);
 		_edge_sprites[road_id].owner_id = player_id;
-		draw();
 		return true;
 	} else {
+		alert("そこには道をつくれないよ！");
 		return false;
 	}
 }
@@ -53,10 +59,10 @@ function buildRoad(player_id,road_id){
 //                                 開拓したい場所    初期建設かどうか
 function buildSettlement(player_id, intersection_id, initBuild = false){
 	//すでに他の建築物が建ってるならスルー
-	//test!!
-	// if ( _intersection_sprites[intersection_id].owner_id != -1) {
-	// 	return false;
-	// }
+	if ( _intersection_sprites[intersection_id].owner_id != -1) {
+		alert("すでに開拓地が建っているよ！");
+		return false;
+	}
 
 	//test!!
 	buildCity(player_id,intersection_id);
@@ -66,6 +72,7 @@ function buildSettlement(player_id, intersection_id, initBuild = false){
 		return false;
 	}
 
+
 	//建設可能場所を探索
 	//建設可能場所を表示　なかったらreturn
 	//建設場所を選択
@@ -74,6 +81,7 @@ function buildSettlement(player_id, intersection_id, initBuild = false){
 	for (var i = 0; i < _adjacents[intersection_id].length; i++) {
 		//                          //建てたい交差点に隣接している点たち	
 		if ( _intersection_sprites[ _adjacents[ intersection_id ][i] ].owner_id != -1) {
+			alert("そこには建てられないよ！");
 			return false;
 		}		  
 	}

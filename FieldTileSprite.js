@@ -21,6 +21,7 @@ inherits(FieldTileSprite, BaseSprite);
 
 //@override
 FieldTileSprite.prototype.onClick = function(){
+	console.log(this.id);
 	switch (_now_init_state){
 		case ENUM_INIT_STATE.TILE:
 			//クリックしたタイルに資源が入っていたら空タイルにする

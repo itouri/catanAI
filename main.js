@@ -73,10 +73,6 @@ var mouseEvent = function( e ) {
 	var x = e.pageX ;	// X座標
 	var y = e.pageY ;	// Y座標
 
-	ctx.fillStyle = "black";
-	ctx.font = "60px 'ＭＳ Ｐゴシック'";
-	ctx.fillText( x+":"+y, 600,600); //test!!!
-
 	for (var i = 0; i < _field_tile_sprites.length; i++) {
 		_field_tile_sprites[i].checkClickedCircle(x,y);
 	}
@@ -117,19 +113,21 @@ var mouseEvent = function( e ) {
 				_choose_player_color_labels[i].checkClickedRect(x,y);
 			}
 			break;
+
+		case ENUM_INIT_STATE.BUILD:
+			//交差点
+			for (var i = 0; i < _intersection_sprites.length; i++) {
+				_intersection_sprites[i].checkClickedCircle(x,y);
+				//return;
+			}
+			//道
+			for (var i = 0; i < _edge_sprites.length; i++) {
+				_edge_sprites[i].checkClickedCircle(x,y);
+				//return;
+			}
+		break;
 	}
 
-	//test!!
-	if ( _now_init_state > ENUM_INIT_STATE.PLAYER_COLOR ){
-		for (var i = 0; i < _intersection_sprites.length; i++) {
-			_intersection_sprites[i].checkClickedCircle(x,y);
-		}
-	}
-
-	//test!!
-		for (var i = 0; i < _edge_sprites.length; i++) {
-			_edge_sprites[i].checkClickedCircle(x,y);
-		}
 
 	if (_show_controller) {
 		switch(_selected_tab){
@@ -258,16 +256,13 @@ function draw(){
 		}
 	}
 
-	//test!!
-		for (var i = 0; i < _edge_sprites.length; i++) {
-			_edge_sprites[i].draw();
-		}
+	for (var i = 0; i < _able_build_places.length; i++) {
+		_edge_sprites[_able_build_places[i]].draw(true);
+	}
 
-		for (var i = 0; i < _able_build_places.length; i++) {
-			_edge_sprites[_able_build_places[i]].draw(true);
-		}
-
-
+	for (var i = 0; i < _edge_sprites.length; i++) {
+		_edge_sprites[i].draw();
+	}
 
 	switch(_now_init_state){
 		case ENUM_INIT_STATE.TILE:
@@ -312,7 +307,10 @@ function draw(){
 			break;
 	}
 
-	_check_button_sprite.draw();
+	//初期建設中は次へは非表示
+	if ( _now_init_state != ENUM_INIT_STATE.BUILD ) {
+		_check_button_sprite.draw();
+	}
 	_back_button_sprite.draw();
 }
 

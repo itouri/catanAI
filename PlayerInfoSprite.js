@@ -34,9 +34,11 @@ PlayerInfoSprite.prototype.draw = function(){
 	}
 
 	//自分の初期建設の順番を表示
-	if (_now_init_state == ENUM_INIT_STATE.PLAYER_ORDER) {
+	if (_now_init_state == ENUM_INIT_STATE.PLAYER_ORDER 
+		|| _now_init_state == ENUM_INIT_STATE.BUILD) {
 		var order = -1;
 		for (var i = 0; i < _init_build_orders.length; i++) {
+			//XXX　わけわからん　なぜ this.colorなんて使ってるんだ?
 			if (_init_build_orders[i] == this.color){
 				order = i;
 			}

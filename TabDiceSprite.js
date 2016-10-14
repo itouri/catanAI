@@ -18,8 +18,9 @@ TabDiceSprite.prototype.onClick = function(){
 		//資源の配分
 		//騎士?
 		//コントローラーの変更
-		_is_before_dice_roll = false;
+		//_is_before_dice_roll = false;
 		_selected_tab = ENUM_CONTROLLER_TAB.BUILD;
+		dice(this.token);
 }
 
 TabDiceSprite.prototype.draw = function(){

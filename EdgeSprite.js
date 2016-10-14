@@ -17,7 +17,9 @@ inherits(EdgeSprite, BaseSprite);
 
 //@override
 EdgeSprite.prototype.onClick = function(){
-	buildRoad(0,this.id);//test!!
+	if (_now_init_state == ENUM_INIT_STATE.BUILD) {
+		initBuild(this.id);
+	}
 }
 
 EdgeSprite.prototype.init = function(){
