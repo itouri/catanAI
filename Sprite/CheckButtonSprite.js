@@ -34,6 +34,15 @@ CheckButtonSprite.prototype.onClick = function(){
 		case ENUM_INIT_STATE.PLAYER_COLOR:
 			_show_controller = true;
 		break;
+
+		case ENUM_INIT_STATE.BUILD:
+			_trun_player_id = _init_build_orders[0];
+			console.log(_trun_player_id)
+
+		// 初期化のあとなら次のターンへ
+		case ENUM_INIT_STATE.END:
+			nextTurn();
+		break;
 	}
 
 	if ( _now_init_state != ENUM_INIT_STATE.END ) {
