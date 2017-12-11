@@ -60,7 +60,7 @@ var _is_before_dice_roll = true;
 var _action_used = false; //そのターン中アクションを使っている
 
 //現在の手番のID
-var _trun_player_id;
+var _turn_player_id;
 
 var _able_build_places = [];
 
@@ -68,6 +68,8 @@ var _able_build_places = [];
 var mouseEvent = function( e ) {
 	// 動作を停止
 	e.preventDefault() ;
+
+	draw();
 
 	// マウス位置を取得する
 	var x = e.pageX ;	// X座標
@@ -117,12 +119,12 @@ var mouseEvent = function( e ) {
 		case ENUM_INIT_STATE.BUILD:
 			//交差点
 			for (var i = 0; i < _intersection_sprites.length; i++) {
-				_intersection_sprites[i].checkClickedCircle(x,y);
-				//return;
+				_intersection_sprites[i].checkClickedCircle(x,y,true,0.75);
+				skip = true;
 			}
 			//道
 			for (var i = 0; i < _edge_sprites.length; i++) {
-				_edge_sprites[i].checkClickedCircle(x,y);
+				_edge_sprites[i].checkClickedCircle(x,y,true,0.75);
 				//return;
 			}
 		break;
@@ -172,7 +174,7 @@ var mouseEvent = function( e ) {
 	_check_button_sprite.checkClickedRect(x,y);
 	_back_button_sprite.checkClickedRect(x,y);
 
-	draw();
+	//draw();
 } ;
 
 //FIXME ctx渡さなアカンの?

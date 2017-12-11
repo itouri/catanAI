@@ -10,8 +10,8 @@ BaseSprite = function(){
 }
 
 //クリック箇所が画像の中心からradius以内かどうか調べる
-BaseSprite.prototype.checkClickedCircle = function(clicked_x,clicked_y){
-	radius = this.height / 2;
+BaseSprite.prototype.checkClickedCircle = function(clicked_x,clicked_y, is=false, rate=1.0){
+	radius = (this.height / 2) * rate;
 	center_x = this.x + this.width  / 2;
 	center_y = this.y + this.height / 2;
 
@@ -19,6 +19,12 @@ BaseSprite.prototype.checkClickedCircle = function(clicked_x,clicked_y){
 	dy = center_y - clicked_y;
 
 	distance = Math.sqrt(dx * dx + dy * dy);
+
+	if ( is ) {
+		ctx.beginPath();
+		ctx.arc(center_x, center_y, radius, 0, Math.PI*2, false);
+		ctx.stroke();
+	}
 
 	if ( distance < radius ) {
 		this.onClick();

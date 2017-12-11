@@ -27,6 +27,7 @@ IntersectionSprite.prototype.onClick = function(){
 	//var result = buildSettlement(0,this.id,true);//test!!
 	switch( _now_init_state ){
 		case ENUM_INIT_STATE.BUILD:
+			console.log("交差点: "+this.id);
 			initBuild(this.id);
 		break;
 	}

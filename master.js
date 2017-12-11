@@ -90,6 +90,12 @@ function nextTurn(){
 	_turn_player_id++;
 	_turn_player_id %= MAX_PLAYER;
 
+	// ターンが変わったらサイコロ画面にする
+	_selected_tab = ENUM_CONTROLLER_TAB.DICE;
+
+	alert(_init_build_orders[0]);
+	alert(_turn_player_id);
+
 	//コントロールタブをサイコロを振る前に戻す	
 	_is_before_dice_roll = true;
 	//アクションを未使用にする

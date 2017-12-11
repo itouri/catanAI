@@ -32,12 +32,16 @@ CheckButtonSprite.prototype.onClick = function(){
 		break;
 
 		case ENUM_INIT_STATE.PLAYER_COLOR:
+			// nextTurnで最初に1追加からゲームスタートなので最初から1引いておく
+			_turn_player_id = _players[0].id - 1;
 			_show_controller = true;
 		break;
 
+		// TODO BUILDの間は CheckButtonSpriteは消されてしまうので、このcaseが呼ばれない
 		case ENUM_INIT_STATE.BUILD:
-			_trun_player_id = _init_build_orders[0];
-			console.log(_trun_player_id)
+			alert("?");
+		break;
+
 
 		// 初期化のあとなら次のターンへ
 		case ENUM_INIT_STATE.END:
