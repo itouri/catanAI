@@ -1,33 +1,20 @@
 class Asset {
-    // アセットの定義
-    public assets;
     // 読み込んだ画像
-    public images;
-
-    constructor(){
-        // 現状なし
-    }
-
-    public init() {
-
-    }
+    public images: {key?: string;} = {}; // 連想配列の定義
 
     //アセットをimgタグからImageを作成
-    private initAssets() {
+    private init() {
         //全てのimgタグを取ってきてAssetに格納
-        let assets = document.getElementsByTagName("img");
-        for (let i = assets.length - 1; i >= 0; i--) {
-            let id = assets[i].getAttribute("id");
-            let src= assets[i].getAttribute("src");
-            this.assets.push( { type: 'image', id: id, src: src});
+        let htmlImgElements = document.getElementsByTagName("img");
+        let assets;
+        for (let i = htmlImgElements.length - 1; i >= 0; i--) {
+            let id = htmlImgElements[i].getAttribute("id");
+            let src= htmlImgElements[i].getAttribute("src");
+            assets.push( { type: 'image', id: id, src: src});
         }
-
-        // this.loadAssets();
-        let total = this.assets.length; // アセットの合計数
-        let loadCount = 0; // 読み込み完了したアセット数
     
         // すべてのアセットを読み込む
-        this.assets.forEach(function(asset) {
+        assets.forEach(asset => {
             switch (asset.type) {
                   case 'image':
                     let image = new Image();
